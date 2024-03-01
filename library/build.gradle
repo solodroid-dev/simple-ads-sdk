@@ -41,6 +41,6 @@ dependencies {
 
     //GDPR
     implementation 'com.google.android.ump:user-messaging-platform:2.2.0'
-    implementation 'com.google.android.ads.consent:consent-library:1.0.8'
+    //implementation 'com.google.android.ads.consent:consent-library:1.0.8'
 
 }
