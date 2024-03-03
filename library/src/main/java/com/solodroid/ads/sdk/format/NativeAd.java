@@ -83,6 +83,7 @@ public class NativeAd {
         private String appLovinNativeId = "";
         private String appLovinDiscMrecZoneId = "";
         private String wortiseNativeId = "";
+        private String alienAdsNativeId = "";
         private int placementStatus = 1;
         private boolean darkTheme = false;
         private boolean legacyGDPR = false;
@@ -157,6 +158,11 @@ public class NativeAd {
 
         public Builder setWortiseNativeId(String wortiseNativeId) {
             this.wortiseNativeId = wortiseNativeId;
+            return this;
+        }
+
+        public Builder setAlienAdsNativeId(String alienAdsNativeId) {
+            this.alienAdsNativeId = alienAdsNativeId;
             return this;
         }
 
