@@ -2,12 +2,16 @@ package com.solodroid.ads.sdk.format;
 
 import static com.solodroid.ads.sdk.util.Constant.ADMOB;
 import static com.solodroid.ads.sdk.util.Constant.AD_STATUS_ON;
+import static com.solodroid.ads.sdk.util.Constant.APPLOVIN;
+import static com.solodroid.ads.sdk.util.Constant.APPLOVIN_MAX;
 import static com.solodroid.ads.sdk.util.Constant.FAN_BIDDING_ADMOB;
 import static com.solodroid.ads.sdk.util.Constant.FAN_BIDDING_AD_MANAGER;
 import static com.solodroid.ads.sdk.util.Constant.GOOGLE_AD_MANAGER;
+import static com.solodroid.ads.sdk.util.Constant.WORTISE;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Application;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -21,8 +25,241 @@ import com.solodroid.ads.sdk.util.OnShowAdCompleteListener;
 
 @SuppressLint("StaticFieldLeak")
 public class AppOpenAd {
+
     public static com.google.android.gms.ads.appopen.AppOpenAd appOpenAd = null;
     public static boolean isAppOpenAdLoaded = false;
+    AppOpenAdMob appOpenAdMob;
+    AppOpenAdManager appOpenAdManager;
+    AppOpenAdAppLovin appOpenAdAppLovin;
+    AppOpenAdWortise appOpenAdWortise;
+    boolean adStatus;
+    boolean placementStatus;
+    private String adNetwork = "";
+    private String backupAdNetwork = "";
+    private String adMobAppOpenId = "";
+    private String adManagerAppOpenId = "";
+    private String applovinAppOpenId = "";
+    private String wortiseAppOpenId = "";
+    Activity currentActivity;
+
+    public AppOpenAd initAppOpenAdMob(AppOpenAdMob appOpenAdMob) {
+        this.appOpenAdMob = appOpenAdMob;
+        return this;
+    }
+
+    public AppOpenAd initAppOpenAdManager(AppOpenAdManager appOpenAdManager) {
+        this.appOpenAdManager = appOpenAdManager;
+        return this;
+    }
+
+    public AppOpenAd initAppOpenAdAppLovin(AppOpenAdAppLovin appOpenAdAppLovin) {
+        this.appOpenAdAppLovin = appOpenAdAppLovin;
+        return this;
+    }
+
+    public AppOpenAd initAppOpenAdWortise(AppOpenAdWortise appOpenAdWortise) {
+        this.appOpenAdWortise = appOpenAdWortise;
+        return this;
+    }
+
+    public AppOpenAd setAdStatus(boolean adStatus) {
+        this.adStatus = adStatus;
+        return this;
+    }
+
+    public AppOpenAd setPlacementStatus(boolean placementStatus) {
+        this.placementStatus = placementStatus;
+        return this;
+    }
+
+    public AppOpenAd setAdNetwork(String adNetwork) {
+        this.adNetwork = adNetwork;
+        return this;
+    }
+
+    public AppOpenAd setBackupAdNetwork(String backupAdNetwork) {
+        this.backupAdNetwork = backupAdNetwork;
+        return this;
+    }
+
+    public AppOpenAd setAdMobAppOpenId(String adMobAppOpenId) {
+        this.adMobAppOpenId = adMobAppOpenId;
+        return this;
+    }
+
+    public AppOpenAd setAdManagerAppOpenId(String adManagerAppOpenId) {
+        this.adManagerAppOpenId = adManagerAppOpenId;
+        return this;
+    }
+
+    public AppOpenAd setApplovinAppOpenId(String applovinAppOpenId) {
+        this.applovinAppOpenId = applovinAppOpenId;
+        return this;
+    }
+
+    public AppOpenAd setWortiseAppOpenId(String wortiseAppOpenId) {
+        this.wortiseAppOpenId = wortiseAppOpenId;
+        return this;
+    }
+
+    public AppOpenAd setOnStartLifecycleObserver() {
+        onStartLifecycleObserver();
+        return this;
+    }
+
+    public AppOpenAd setOnStartActivityLifecycleCallbacks(Activity activity) {
+        onStartActivityLifecycleCallbacks(activity);
+        return this;
+    }
+
+    public void onStartLifecycleObserver() {
+        if (placementStatus) {
+            if (adStatus) {
+                switch (adNetwork) {
+                    case ADMOB:
+                        if (!adMobAppOpenId.equals("0")) {
+                            if (!currentActivity.getIntent().hasExtra("unique_id")) {
+                                appOpenAdMob.showAdIfAvailable(currentActivity, adMobAppOpenId);
+                            }
+                        }
+                        break;
+                    case GOOGLE_AD_MANAGER:
+                        if (!adManagerAppOpenId.equals("0")) {
+                            if (!currentActivity.getIntent().hasExtra("unique_id")) {
+                                appOpenAdManager.showAdIfAvailable(currentActivity, adManagerAppOpenId);
+                            }
+                        }
+                        break;
+                    case APPLOVIN:
+                    case APPLOVIN_MAX:
+                        if (!applovinAppOpenId.equals("0")) {
+                            if (!currentActivity.getIntent().hasExtra("unique_id")) {
+                                appOpenAdAppLovin.showAdIfAvailable(currentActivity, applovinAppOpenId);
+                            }
+                        }
+                        break;
+
+                    case WORTISE:
+                        if (!wortiseAppOpenId.equals("0")) {
+                            if (!currentActivity.getIntent().hasExtra("unique_id")) {
+                                appOpenAdWortise.showAdIfAvailable(currentActivity, wortiseAppOpenId);
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+    }
+
+    public void onStartActivityLifecycleCallbacks(Activity activity) {
+        if (placementStatus) {
+            if (adStatus) {
+                switch (adNetwork) {
+                    case ADMOB:
+                        if (!adMobAppOpenId.equals("0")) {
+                            if (!appOpenAdMob.isShowingAd) {
+                                currentActivity = activity;
+                            }
+                        }
+                        break;
+                    case GOOGLE_AD_MANAGER:
+                        if (!adManagerAppOpenId.equals("0")) {
+                            if (!appOpenAdManager.isShowingAd) {
+                                currentActivity = activity;
+                            }
+                        }
+                        break;
+                    case APPLOVIN:
+                    case APPLOVIN_MAX:
+                        if (!applovinAppOpenId.equals("0")) {
+                            if (!appOpenAdAppLovin.isShowingAd) {
+                                currentActivity = activity;
+                            }
+                        }
+                        break;
+                    case WORTISE:
+                        if (!wortiseAppOpenId.equals("0")) {
+                            if (!appOpenAdWortise.isShowingAd) {
+                                currentActivity = activity;
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+    }
+
+    public AppOpenAd showAppOpenAdIfAvailable(Activity activity, OnShowAdCompleteListener onShowAdCompleteListener) {
+        if (adStatus && placementStatus) {
+            switch (adNetwork) {
+                case ADMOB:
+                    if (!adMobAppOpenId.equals("0")) {
+                        showAdIfAvailable(activity, onShowAdCompleteListener);
+                    } else {
+                        onShowAdCompleteListener.onShowAdComplete();
+                    }
+                    break;
+                case GOOGLE_AD_MANAGER:
+                    if (!adManagerAppOpenId.equals("0")) {
+                        showAdIfAvailable(activity, onShowAdCompleteListener);
+                    } else {
+                        onShowAdCompleteListener.onShowAdComplete();
+                    }
+                    break;
+                case APPLOVIN:
+                case APPLOVIN_MAX:
+                    if (!applovinAppOpenId.equals("0")) {
+                       showAdIfAvailable(activity, onShowAdCompleteListener);
+                    } else {
+                        onShowAdCompleteListener.onShowAdComplete();
+                    }
+                    break;
+                case WORTISE:
+                    if (!wortiseAppOpenId.equals("0")) {
+                        showAdIfAvailable(activity, onShowAdCompleteListener);
+                    } else {
+                        onShowAdCompleteListener.onShowAdComplete();
+                    }
+                    break;
+                default:
+                    onShowAdCompleteListener.onShowAdComplete();
+                    break;
+            }
+        } else {
+            onShowAdCompleteListener.onShowAdComplete();
+        }
+        return this;
+    }
+
+    public void showAdIfAvailable(@NonNull Activity activity, @NonNull OnShowAdCompleteListener onShowAdCompleteListener) {
+        if (placementStatus) {
+            if (adStatus) {
+                switch (adNetwork) {
+                    case ADMOB:
+                        if (!adMobAppOpenId.equals("0")) {
+                            appOpenAdMob.showAdIfAvailable(activity, adMobAppOpenId, onShowAdCompleteListener);
+                        }
+                        break;
+                    case GOOGLE_AD_MANAGER:
+                        if (!adManagerAppOpenId.equals("0")) {
+                            appOpenAdManager.showAdIfAvailable(activity, adManagerAppOpenId, onShowAdCompleteListener);
+                        }
+                        break;
+                    case APPLOVIN:
+                    case APPLOVIN_MAX:
+                        if (!applovinAppOpenId.equals("0")) {
+                            appOpenAdAppLovin.showAdIfAvailable(activity, applovinAppOpenId, onShowAdCompleteListener);
+                        }
+                        break;
+                    case WORTISE:
+                        if (!wortiseAppOpenId.equals("0")) {
+                            appOpenAdWortise.showAdIfAvailable(activity, wortiseAppOpenId, onShowAdCompleteListener);
+                        }
+                        break;
+                }
+            }
+        }
+    }
 
     public static class Builder {
 

@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         bannerAdView = findViewById(R.id.banner_ad_view);
-        bannerAdView.addView(View.inflate(this, R.layout.view_banner_ad, null));
+        bannerAdView.addView(View.inflate(this, com.solodroid.ads.sdk.R.layout.view_banner_ad, null));
 
         initAds();
         loadGdpr();
@@ -398,19 +398,19 @@ public class MainActivity extends AppCompatActivity {
     private void setNativeAdStyle(LinearLayout nativeAdView) {
         switch (Constant.NATIVE_STYLE) {
             case "news":
-                nativeAdView.addView(View.inflate(this, R.layout.view_native_ad_news, null));
+                nativeAdView.addView(View.inflate(this, com.solodroid.ads.sdk.R.layout.view_native_ad_news, null));
                 break;
             case "radio":
-                nativeAdView.addView(View.inflate(this, R.layout.view_native_ad_radio, null));
+                nativeAdView.addView(View.inflate(this, com.solodroid.ads.sdk.R.layout.view_native_ad_radio, null));
                 break;
             case "video_small":
-                nativeAdView.addView(View.inflate(this, R.layout.view_native_ad_video_small, null));
+                nativeAdView.addView(View.inflate(this, com.solodroid.ads.sdk.R.layout.view_native_ad_video_small, null));
                 break;
             case "video_large":
-                nativeAdView.addView(View.inflate(this, R.layout.view_native_ad_video_large, null));
+                nativeAdView.addView(View.inflate(this, com.solodroid.ads.sdk.R.layout.view_native_ad_video_large, null));
                 break;
             default:
-                nativeAdView.addView(View.inflate(this, R.layout.view_native_ad_medium, null));
+                nativeAdView.addView(View.inflate(this, com.solodroid.ads.sdk.R.layout.view_native_ad_medium, null));
                 break;
         }
     }
