@@ -49,6 +49,7 @@ import com.solodroid.ads.sdk.gdpr.GDPR;
 import com.solodroid.ads.sdk.util.OnRewardedAdCompleteListener;
 import com.solodroid.ads.sdk.util.OnRewardedAdDismissedListener;
 import com.solodroid.ads.sdk.util.OnRewardedAdErrorListener;
+import com.solodroid.ads.sdk.util.OnRewardedAdLoadedListener;
 import com.solodroid.ads.sdkdemo.BuildConfig;
 import com.solodroid.ads.sdkdemo.R;
 import com.solodroid.ads.sdkdemo.data.Constant;
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPref sharedPref;
     Button btnInterstitial;
     Button btnRewarded;
+    Button btnRewarded2;
     Button btnSelectAds;
     Button btnNativeAdStyle;
     LinearLayout nativeAdViewContainer;
@@ -113,6 +115,9 @@ public class MainActivity extends AppCompatActivity {
 
         btnRewarded = findViewById(R.id.btn_rewarded);
         btnRewarded.setOnClickListener(view -> showRewardedAd());
+
+        btnRewarded2 = findViewById(R.id.btn_rewarded2);
+        btnRewarded2.setOnClickListener(view -> loadAndShowRewardedAd());
 
         btnSelectAds = findViewById(R.id.btn_select_ads);
         btnSelectAds.setOnClickListener(v -> showAdChooser());
@@ -240,12 +245,13 @@ public class MainActivity extends AppCompatActivity {
                 .build(new OnRewardedAdCompleteListener() {
                     @Override
                     public void onRewardedAdComplete() {
+                        //complete
                         Toast.makeText(getApplicationContext(), "Rewarded complete", Toast.LENGTH_SHORT).show();
                     }
                 }, new OnRewardedAdDismissedListener() {
                     @Override
                     public void onRewardedAdDismissed() {
-
+                        //dismiss
                     }
                 });
     }
@@ -267,6 +273,34 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Rewarded error", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void loadAndShowRewardedAd() {
+        rewardedAd = new RewardedAd.Builder(this)
+                .setAdStatus(Constant.AD_STATUS)
+                .setMainAds(Constant.AD_NETWORK)
+                .setBackupAds(Constant.BACKUP_AD_NETWORK)
+                .setAdMobRewardedId(Constant.ADMOB_REWARDED_ID)
+                .setAdManagerRewardedId(Constant.GOOGLE_AD_MANAGER_REWARDED_ID)
+                .setFanRewardedId(Constant.FAN_REWARDED_ID)
+                .setUnityRewardedId(Constant.UNITY_REWARDED_ID)
+                .setApplovinMaxRewardedId(Constant.APPLOVIN_MAX_REWARDED_ID)
+                .setApplovinDiscRewardedZoneId(Constant.APPLOVIN_DISC_REWARDED_ZONE_ID)
+                .setIronSourceRewardedId(Constant.IRONSOURCE_REWARDED_ID)
+                .setWortiseRewardedId(Constant.WORTISE_REWARDED_ID)
+                .build(() -> {
+                    //onRewardedAdLoaded
+                    Toast.makeText(getApplicationContext(), "Rewarded loaded, show ad", Toast.LENGTH_SHORT).show();
+                }, () -> {
+                    //onRewardedAdError
+                    Toast.makeText(getApplicationContext(), "Rewarded error", Toast.LENGTH_SHORT).show();
+                }, () -> {
+                    //onRewardedAdDismissed
+                    Toast.makeText(getApplicationContext(), "Rewarded dismissed", Toast.LENGTH_SHORT).show();
+                }, () -> {
+                    //onRewardedAdComplete
+                    Toast.makeText(getApplicationContext(), "Complete, user earn rewards", Toast.LENGTH_SHORT).show();
+                });
     }
 
     private void showInterstitialAd() {
