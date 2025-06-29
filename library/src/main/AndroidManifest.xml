@@ -27,10 +27,10 @@
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
 
-        <property
-            android:name="android.adservices.AD_SERVICES_CONFIG"
-            android:resource="@xml/gma_ad_services_config"
-            tools:replace="android:resource" />
+<!--        <property-->
+<!--            android:name="android.adservices.AD_SERVICES_CONFIG"-->
+<!--            android:resource="@xml/gma_ad_services_config"-->
+<!--            tools:replace="android:resource" />-->
 
     </application>
 
